@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Complaint - Hostel Complaint Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initStandaloneComplaintPage()">
+
+  <nav class="topbar" style="position: static; margin-bottom: 2rem;">
+    <div class="topbar-left">
+      <a href="student-dashboard.html" style="text-decoration: none; font-size: 1.25rem; font-weight: 700; color: var(--primary);">
+        🏛️ HostelCare
+      </a>
+    </div>
+    <div class="topbar-right">
+      <span class="pill-badge">
+        <span>🎓</span>
+        <span class="current-user-name">Student</span>
+      </span>
+      <a href="student-dashboard.html" class="btn btn-secondary btn-sm">&larr; Back to Dashboard</a>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container" style="max-width: 650px;">
+    <div class="card">
+      <div class="card-header-row">
+        <h3>🛠️ Lodge a New Complaint</h3>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        Fill in the details below. Complaint ID, Student ID, Block, and Date will be recorded automatically.
+      </p>
+
+      <!-- Alert if Hostel Block or Room Number is missing in profile -->
+      <div id="missingLocationAlert" class="alert alert-error" style="display: none; margin-bottom: 1.25rem;">
+        ⚠️ Your student profile does not have an assigned Hostel Block or Room Number. Please update your profile before submitting a complaint.
+      </div>
+
+      <form id="studentComplaintForm" onsubmit="handleStudentSubmitComplaint(event)">
+        <div class="form-group">
+          <label for="complaintCategorySelect">Complaint Category</label>
+          <select id="complaintCategorySelect" name="category" class="form-control" required>
+            <option value="" disabled selected>Loading categories...</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="complaintHostelBlock">Hostel Block</label>
+            <input 
+              type="text" 
+              id="complaintHostelBlock" 
+              name="hostelBlock" 
+              class="form-control" 
+              readonly 
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label for="complaintRoomNumber">Room Number</label>
+            <input 
+              type="text" 
+              id="complaintRoomNumber" 
+              name="roomNumber" 
+              class="form-control" 
+              readonly 
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="complaintDesc">Complaint Description</label>
+          <textarea 
+            id="complaintDesc" 
+            name="description" 
+            class="form-control" 
+            placeholder="Describe the issue accurately (e.g. Ceiling fan speed regulator is loose, bathroom tap leaking, etc.)"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" id="submitComplaintBtn" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+          🚀 Submit Complaint
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

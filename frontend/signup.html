@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration - Hostel Complaint Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="redirectIfLoggedIn()">
+
+  <div class="auth-page">
+    <div class="auth-container" style="max-width: 620px;">
+      <div class="auth-header">
+        <span class="crest">📝</span>
+        <h1>Student Registration</h1>
+        <p>Register your hostel room to submit and track maintenance requests</p>
+      </div>
+
+      <!-- Registration Form -->
+      <form onsubmit="handleStudentSignup(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Student Full Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              class="form-control" 
+              placeholder="e.g. Priya Sharma" 
+              required
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input 
+              type="number" 
+              id="studentId" 
+              name="studentId" 
+              class="form-control" 
+              placeholder="e.g. 102 (Auto if left blank)" 
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">College Email Address</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="form-control" 
+              placeholder="priya@college.edu" 
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Contact Phone Number</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone" 
+              class="form-control" 
+              placeholder="+91 9876543210"
+              autocomplete="tel"
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="department">Academic Department</label>
+            <input 
+              type="text" 
+              id="department" 
+              name="department" 
+              class="form-control" 
+              placeholder="e.g. Computer Science"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="year">Academic Year</label>
+            <select id="year" name="year" class="form-control" required>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year" selected>3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="hostelBlock">Assigned Hostel Block</label>
+            <select id="hostelBlock" name="hostelBlock" class="form-control" required>
+              <option value="A">Block A (Boys)</option>
+              <option value="B">Block B (Boys)</option>
+              <option value="C">Block C (Girls)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="roomNumber">Room Number</label>
+            <input 
+              type="number" 
+              id="roomNumber" 
+              name="roomNumber" 
+              class="form-control" 
+              placeholder="e.g. 205" 
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Account Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-control" 
+              placeholder="Create password" 
+              required
+              autocomplete="new-password"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              class="form-control" 
+              placeholder="Confirm password" 
+              required
+              autocomplete="new-password"
+            >
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.25rem;">
+          Complete Registration
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.92rem; color: var(--text-muted);">
+        Already registered as a hostel resident? 
+        <a href="index.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Login to Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

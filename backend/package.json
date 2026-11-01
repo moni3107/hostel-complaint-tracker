@@ -1,0 +1,21 @@
+{
+  "name": "hostel-complaint-tracker-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Hostel Complaint Tracker",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": ["hostel", "complaint", "tracker", "express", "mongodb"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

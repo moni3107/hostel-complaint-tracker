@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Redirecting...</title>
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const user = getCurrentUser();
+      if (!user) {
+        window.location.href = "index.html";
+      } else if (user.role === "ADMIN") {
+        window.location.href = "admin-dashboard.html";
+      } else if (user.role === "WARDEN") {
+        window.location.href = "warden-dashboard.html";
+      } else {
+        window.location.href = "student-dashboard.html";
+      }
+    });
+  </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 3rem;">
+  <h2>Loading your dashboard...</h2>
+  <p>Redirecting to your role-specific portal.</p>
+</body>
+</html>

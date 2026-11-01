@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal - Hostel Complaint Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initStudentDashboard()">
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="student-dashboard.html" class="sidebar-brand">
+          <span>🏛️</span>
+          <span>HostelCare</span>
+        </a>
+        <span class="sidebar-badge">Student</span>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="menu-label">Student Services</li>
+        <li class="menu-item">
+          <button class="menu-link active" onclick="switchView('dashboardView', this)">
+            <span class="icon">📊</span>
+            <span>Dashboard</span>
+          </button>
+        </li>
+        <li class="menu-item">
+          <button class="menu-link" onclick="switchView('addComplaintView', this)">
+            <span class="icon">➕</span>
+            <span>Add Complaint</span>
+          </button>
+        </li>
+        <li class="menu-item">
+          <button class="menu-link" data-view="myComplaintsView" onclick="switchView('myComplaintsView', this)">
+            <span class="icon">📋</span>
+            <span>My Complaints</span>
+          </button>
+        </li>
+        <li class="menu-item">
+          <button class="menu-link" onclick="switchView('statusView', this)">
+            <span class="icon">⏳</span>
+            <span>Complaint Status</span>
+          </button>
+        </li>
+        <li class="menu-item">
+          <button class="menu-link" onclick="switchView('profileView', this)">
+            <span class="icon">👤</span>
+            <span>Profile</span>
+          </button>
+        </li>
+
+        <li class="menu-label" style="margin-top: 1rem;">Session</li>
+        <li class="menu-item">
+          <button class="menu-link" onclick="logout()" style="color: #f87171;">
+            <span class="icon">🚪</span>
+            <span>Logout</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar">ST</div>
+          <div class="user-info">
+            <div class="user-name current-user-name">Student Resident</div>
+            <div class="user-role student-room-tag">Room Assigned</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+          <h2 class="page-title" id="pageTitle">Student Dashboard</h2>
+        </div>
+
+        <div class="topbar-right">
+          <span class="pill-badge">
+            <span>🎓</span>
+            <span class="student-id-tag">Student ID</span>
+          </span>
+          <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+
+        <!-- 1. DASHBOARD OVERVIEW -->
+        <div class="tab-view active" id="dashboardView">
+          <div class="welcome-banner">
+            <div>
+              <h2>Hello, <span class="current-user-name">Student</span>! 👋</h2>
+              <p>Hostel Residence: <strong class="student-room-tag">Assigned Room</strong> &bull; Need repairs or maintenance? Lodge a complaint anytime.</p>
+            </div>
+            <div>
+              <button class="btn btn-secondary" onclick="switchView('addComplaintView', document.querySelectorAll('.menu-link')[1])">
+                ➕ Add Complaint
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Grid (Clickable) -->
+          <div class="stats-grid">
+            <div class="stat-card" style="cursor: pointer;" onclick="switchView('myComplaintsView')">
+              <div class="stat-icon primary">📊</div>
+              <div class="stat-info">
+                <h3 id="myTotalComplaints">0</h3>
+                <p>Total My Complaints</p>
+              </div>
+            </div>
+            <div class="stat-card" style="cursor: pointer;" onclick="switchView('myComplaintsView'); filterStudentComplaintsByStatus('PENDING')">
+              <div class="stat-icon pending">⏳</div>
+              <div class="stat-info">
+                <h3 id="myPendingComplaints" style="color: var(--pending-text);">0</h3>
+                <p>Pending Complaints</p>
+              </div>
+            </div>
+            <div class="stat-card" style="cursor: pointer;" onclick="switchView('myComplaintsView'); filterStudentComplaintsByStatus('IN PROGRESS')">
+              <div class="stat-icon progress">🔧</div>
+              <div class="stat-info">
+                <h3 id="myProgressComplaints" style="color: var(--progress-text);">0</h3>
+                <p>In Progress Complaints</p>
+              </div>
+            </div>
+            <div class="stat-card" style="cursor: pointer;" onclick="switchView('myComplaintsView'); filterStudentComplaintsByStatus('RESOLVED')">
+              <div class="stat-icon resolved">✅</div>
+              <div class="stat-info">
+                <h3 id="myResolvedComplaints" style="color: var(--resolved-text);">0</h3>
+                <p>Resolved Complaints</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <div class="card-header-row">
+              <h3>⚡ Quick Actions</h3>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem;">
+              <button class="btn btn-primary" onclick="switchView('addComplaintView')">
+                🛠️ Submit Complaint
+              </button>
+              <button class="btn btn-secondary" onclick="switchView('myComplaintsView')">
+                📋 My Complaints
+              </button>
+              <button class="btn btn-secondary" onclick="switchView('profileView')">
+                👤 My Profile
+              </button>
+              <button class="btn btn-danger" onclick="logout()">
+                🚪 Logout
+              </button>
+            </div>
+          </div>
+
+          <!-- Student Resident Details Card -->
+          <div class="card">
+            <div class="card-header-row">
+              <h3>🎓 My Student Resident Information</h3>
+              <button class="btn btn-secondary btn-sm" onclick="switchView('profileView')">✏️ Edit Profile</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Student Name</div>
+                <div style="font-size: 1.05rem; font-weight: 700; margin-top: 0.25rem;" id="dashStudentName">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Student ID</div>
+                <div style="font-size: 1.05rem; font-weight: 700; margin-top: 0.25rem; color: var(--primary);" id="dashStudentId">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Hostel Block</div>
+                <div style="font-size: 1.05rem; font-weight: 700; margin-top: 0.25rem;" id="dashStudentBlock">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Room Number</div>
+                <div style="font-size: 1.05rem; font-weight: 700; margin-top: 0.25rem;" id="dashStudentRoom">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Email Address</div>
+                <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem;" id="dashStudentEmail">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Contact Phone</div>
+                <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem;" id="dashStudentPhone">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Department</div>
+                <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem;" id="dashStudentDept">-</div>
+              </div>
+              <div style="background: var(--bg-card-subtle, rgba(0,0,0,0.02)); padding: 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, #e5e7eb);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Academic Year</div>
+                <div style="font-size: 0.95rem; font-weight: 600; margin-top: 0.25rem;" id="dashStudentYear">-</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Complaints Card -->
+          <div class="card" style="margin-top: 1.5rem;">
+            <div class="card-header-row">
+              <h3>📋 Recent Complaints</h3>
+              <button class="btn btn-secondary btn-sm" onclick="switchView('myComplaintsView', document.querySelector('.menu-link[data-view=\'myComplaintsView\']'))">
+                View All Complaints &rarr;
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date Filed</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentRecentComplaintsTableBody">
+                  <!-- Populated via script.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ADD COMPLAINT VIEW -->
+        <div class="tab-view" id="addComplaintView">
+          <div class="card" style="max-width: 650px; margin: 0 auto;">
+            <div class="card-header-row">
+              <h3>🛠️ Lodge a New Complaint</h3>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+              Fill in the details below. Complaint ID, Student ID, Block, and Date will be recorded automatically.
+            </p>
+
+            <!-- Alert if Hostel Block or Room Number is missing in profile -->
+            <div id="missingLocationAlert" class="alert alert-error" style="display: none; margin-bottom: 1.25rem;">
+              ⚠️ Your student profile does not have an assigned Hostel Block or Room Number. Please update your profile before submitting a complaint.
+            </div>
+
+            <form id="studentComplaintForm" onsubmit="handleStudentSubmitComplaint(event)">
+              <div class="form-group">
+                <label for="complaintCategorySelect">Complaint Category</label>
+                <select id="complaintCategorySelect" name="category" class="form-control" required>
+                  <option value="" disabled selected>Loading categories...</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="complaintHostelBlock">Hostel Block</label>
+                  <input 
+                    type="text" 
+                    id="complaintHostelBlock" 
+                    name="hostelBlock" 
+                    class="form-control" 
+                    readonly 
+                    required
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="complaintRoomNumber">Room Number</label>
+                  <input 
+                    type="text" 
+                    id="complaintRoomNumber" 
+                    name="roomNumber" 
+                    class="form-control" 
+                    readonly 
+                    required
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="complaintDesc">Complaint Description</label>
+                <textarea 
+                  id="complaintDesc" 
+                  name="description" 
+                  class="form-control" 
+                  placeholder="Describe the issue accurately (e.g. Ceiling fan speed regulator is loose, bathroom tap leaking, etc.)"
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" id="submitComplaintBtn" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+                🚀 Submit Complaint
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- 3. MY COMPLAINTS VIEW -->
+        <div class="tab-view" id="myComplaintsView">
+          <div class="card">
+            <div class="card-header-row">
+              <h3>📋 My Submitted Complaints</h3>
+              <div class="toolbar">
+                <button class="btn btn-primary btn-sm" onclick="switchView('addComplaintView', document.querySelectorAll('.menu-link')[1])">
+                  ➕ Add New Complaint
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Complaint ID</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Date Filed</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentComplaintsTableBody">
+                  <!-- Populated via script.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. COMPLAINT STATUS VIEW -->
+        <div class="tab-view" id="statusView">
+          <div class="card">
+            <div class="card-header-row">
+              <h3>⏳ Real-time Complaint Status Tracker</h3>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+              Track progress as your complaint moves from <strong>PENDING</strong> &rarr; <strong>IN PROGRESS</strong> &rarr; <strong>RESOLVED</strong>.
+            </p>
+            <div id="studentStatusContainer">
+              <!-- Dynamically populated cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. STUDENT PROFILE VIEW -->
+        <div class="tab-view" id="profileView">
+          <div class="card" style="max-width: 650px; margin: 0 auto;">
+            <div class="card-header-row">
+              <h3>👤 Student Resident Profile</h3>
+            </div>
+            <form onsubmit="handleStudentUpdateProfile(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Student ID</label>
+                  <input type="text" id="profileStudentId" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="profileEmail">Email Address</label>
+                  <input type="email" id="profileEmail" name="email" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="profileName">Full Name</label>
+                  <input type="text" id="profileName" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="profilePhone">Phone Number</label>
+                  <input type="tel" id="profilePhone" name="phone" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="profileDept">Department</label>
+                  <input type="text" id="profileDept" name="department" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="profileYear">Academic Year</label>
+                  <select id="profileYear" name="year" class="form-control">
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Hostel Block</label>
+                  <input type="text" id="profileBlock" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="profileRoom">Room Number</label>
+                  <input type="number" id="profileRoom" name="roomNumber" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="profilePassword">Change Password (Leave blank to keep current)</label>
+                <input type="password" id="profilePassword" name="password" class="form-control" placeholder="New password">
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+                Save Profile Changes
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Complaint Tracker - Portal Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="redirectIfLoggedIn()">
+
+  <div class="auth-page">
+    <div class="auth-container">
+      <div class="auth-header">
+        <span class="crest">🏛️</span>
+        <h1>Hostel Complaint Tracker</h1>
+        <p>Campus Residential Facility Management Portal</p>
+      </div>
+
+      <!-- Role Selector Tabs -->
+      <div class="role-tabs">
+        <button type="button" class="role-tab active" id="tabStudent" onclick="switchLoginRole('STUDENT')">👨‍🎓 Student</button>
+        <button type="button" class="role-tab" id="tabWarden" onclick="switchLoginRole('WARDEN')">🛡️ Warden</button>
+        <button type="button" class="role-tab" id="tabAdmin" onclick="switchLoginRole('ADMIN')">👑 Admin</button>
+      </div>
+
+      <!-- Real Authentication Form -->
+      <form id="loginForm" onsubmit="handleFormLogin(event)">
+        <div class="form-group">
+          <label for="email" id="emailLabel">Student Email or Student ID</label>
+          <input 
+            type="text" 
+            id="email" 
+            name="email" 
+            class="form-control" 
+            placeholder="Enter your registered email or Student ID" 
+            required 
+            autocomplete="username"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-control" 
+            placeholder="Enter your password" 
+            required 
+            autocomplete="current-password"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.25rem;">
+          Login to Portal
+        </button>
+      </form>
+
+      <!-- Student Registration Prompt -->
+      <div id="signupPrompt" style="text-align: center; margin-top: 1.5rem; font-size: 0.92rem; color: var(--text-muted);">
+        New student residing in hostel? 
+        <a href="signup.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Register Here</a>
+      </div>
+
+      <!-- Staff Notice -->
+      <div id="staffNotice" style="display: none; text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-muted);">
+        Residential wardens and authorized administration access only.
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer"></div>
+
+  <script src="script.js"></script>
+  <script>
+    let currentRole = "STUDENT";
+
+    const roleFieldConfig = {
+      STUDENT: {
+        label: "Student Email or Student ID",
+        placeholder: "Enter registered email or Student ID (e.g. 101)",
+        showSignup: true
+      },
+      WARDEN: {
+        label: "Warden Email or Warden ID",
+        placeholder: "Enter warden email (e.g. warden.a@hostel.com) or ID (201)",
+        showSignup: false
+      },
+      ADMIN: {
+        label: "Administrator Email or Admin ID",
+        placeholder: "Enter administrator email (admin@hostel.com) or ID (1)",
+        showSignup: false
+      }
+    };
+
+    function switchLoginRole(role) {
+      currentRole = role;
+      document.querySelectorAll(".role-tab").forEach(tab => tab.classList.remove("active"));
+      
+      if (role === "STUDENT") document.getElementById("tabStudent").classList.add("active");
+      if (role === "WARDEN") document.getElementById("tabWarden").classList.add("active");
+      if (role === "ADMIN") document.getElementById("tabAdmin").classList.add("active");
+
+      const cfg = roleFieldConfig[role];
+      document.getElementById("emailLabel").textContent = cfg.label;
+      document.getElementById("email").placeholder = cfg.placeholder;
+      document.getElementById("signupPrompt").style.display = cfg.showSignup ? "block" : "none";
+      document.getElementById("staffNotice").style.display = cfg.showSignup ? "none" : "block";
+      
+      // Clear inputs
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    function handleFormLogin(event) {
+      handleRoleLogin(currentRole, event);
+    }
+  </script>
+</body>
+</html>
